@@ -1,0 +1,223 @@
+{
+  "datasets": [
+    {
+      "name": "7c22c4b6",
+      "displayName": "Location Data",
+      "queryLines": [
+        "select latitude,longitude,`GHG emissions mtons CO2e` as Emissions from \r\n",
+        "emissions.default.emissions_data"
+      ]
+    },
+    {
+      "name": "1ff84155",
+      "displayName": "Emissions per person",
+      "queryLines": [
+        "select county_name, population,\r\n",
+        "       try_cast(replace(`GHG emissions mtons CO2e`, ',', '') as double) / try_cast(population as double) as Emissions_per_person\r\n",
+        "from emissions.default.emissions_data\r\n",
+        "order by emissions_per_person desc "
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "e349204b",
+      "displayName": "Untitled page",
+      "layout": [
+        {
+          "widget": {
+            "name": "emissions-per-locations",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "7c22c4b6",
+                  "fields": [
+                    {
+                      "name": "latitude",
+                      "expression": "`latitude`"
+                    },
+                    {
+                      "name": "longitude",
+                      "expression": "`longitude`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "mark": {
+                "size": -2.2
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Emissions per locations"
+              },
+              "widgetType": "symbol-map",
+              "encodings": {
+                "coordinates": {
+                  "latitude": {
+                    "fieldName": "latitude"
+                  },
+                  "longitude": {
+                    "fieldName": "longitude"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "2dc61c03",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"text-align:center;display:block;\"><span style=\"font-size: 18px;\">**Unites States Emission Breakdown**</span></span>\n",
+                "\n",
+                "<span style=\"text-align:center;display:block;\"><span style=\"font-size: 14px;\">**This data was collected by EPA(Environmental Protection Agency) in 2023**</span></span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "emissions-vs-populations",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1ff84155",
+                  "fields": [
+                    {
+                      "name": "county_name",
+                      "expression": "`county_name`"
+                    },
+                    {
+                      "name": "Emissions_per_person",
+                      "expression": "`Emissions_per_person`"
+                    },
+                    {
+                      "name": "population",
+                      "expression": "`population`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "showTitle": true,
+                "title": "Emissions vs populations",
+                "showDescription": true,
+                "description": "Higher populations tend to have lower emissions per person."
+              },
+              "mark": {
+                "size": -1.8
+              },
+              "widgetType": "scatter",
+              "encodings": {
+                "x": {
+                  "fieldName": "Emissions_per_person",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "population",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "extra": [
+                  {
+                    "fieldName": "county_name"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 3,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "2319aad6",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1ff84155",
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {}
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 9,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "0c443e7a",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1ff84155",
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {}
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 9,
+            "width": 6,
+            "height": 7
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
